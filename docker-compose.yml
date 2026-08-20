@@ -1,0 +1,8 @@
+services:
+  hotreaper:
+    build: .
+    restart: always
+    env_file: .env
+    volumes:
+      - ./temp:/app/temp
+      - ./data:/app/data
