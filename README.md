@@ -4,6 +4,8 @@ Bot autônomo profissional de download, inteligência artificial de legendas e a
 
 Desenvolvido para criadores de conteúdo e canais VIP, integrando **Motor Universal de Download (1800+ plataformas)**, **Normalização FFmpeg (H.264 / AAC / FastStart sem tela preta)**, **IA Groq Cloud para Legendas Adultas/Sensuais**, **Acervo Multi-Canal com Auto-Limpeza de Disco** e **Algoritmo de Cadência Inteligente (2 Vídeos ➔ 1 Pack de Fotos)**.
 
+# 🔥 HotReaper — Telegram Universal Media Downloader Bot
+> **HotReaper** é um bot para Telegram de download e reencaminhamento automático de mídias sob demanda. Ele recebe links no chat privado, baixa vídeos e fotos de diversas fontes (Twitter/X, URLs diretas e sites de mídia) e os envia automaticamente para um grupo ou canal destino configurado.
 ---
 
 ## 🌟 Principais Funcionalidades da v3.0
@@ -50,7 +52,7 @@ OWNER_ID=123456789
 GROQ_API_KEY=gsk_sua_chave_groq_aqui
 ```
 
----
+bash
 
 ## 🎛️ Painel de Controle Integrado (`/painel`)
 
