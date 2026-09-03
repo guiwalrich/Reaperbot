@@ -1,8 +1,20 @@
 services:
   hotreaper:
     build: .
-    restart: always
+    container_name: hotreaper_app
+    restart: unless-stopped
     env_file: .env
+    environment:
+      - TZ=America/Sao_Paulo
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+      - 1.0.0.1
+      - 8.8.4.4
     volumes:
       - ./temp:/app/temp
       - ./data:/app/data
+    deploy:
+      resources:
+        limits:
+          memory: 1024M

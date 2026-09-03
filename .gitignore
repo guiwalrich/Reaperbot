@@ -7,3 +7,5 @@ __pycache__/
 *.pyc
 *.pyo
 .DS_Store
+*.mp4
+.pytest_cache/

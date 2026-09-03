@@ -1,72 +1,82 @@
-# 🔥 HotReaper Bot
+# 🔥 HotReaper VIP v3.0
 
-Bot de download automático de mídias sob demanda para o Telegram. Recebe links do Twitter/X ou URLs diretas de mídia no chat privado, faz o download em segundo plano e reencaminha automaticamente para o grupo/canal destino configurado.
+Bot autônomo profissional de download, inteligência artificial de legendas e automação de disparos de conteúdo VIP para o Telegram.
 
----
-
-## 📌 Pré-requisitos
-
-1. **Token do Bot**: Crie um novo bot via [@BotFather](https://t.me/BotFather) no Telegram para obter o `BOT_TOKEN`.
-2. **ID do Chat Destino (Opcional no `.env`)**: Obtenha o ID do grupo adicionando o [@userinfobot](https://t.me/userinfobot) ou use o comando `/settarget` diretamente no grupo.
-3. **Docker**: Instância Linux com Docker e Docker Compose instalados.
+Desenvolvido para criadores de conteúdo e canais VIP, integrando **Motor Universal de Download (1800+ plataformas)**, **Normalização FFmpeg (H.264 / AAC / FastStart sem tela preta)**, **IA Groq Cloud para Legendas Adultas/Sensuais**, **Acervo Multi-Canal com Auto-Limpeza de Disco** e **Algoritmo de Cadência Inteligente (2 Vídeos ➔ 1 Pack de Fotos)**.
 
 ---
 
-## ⚙️ Configuração do Ambiente
+## 🌟 Principais Funcionalidades da v3.0
 
-1. Clone o repositório e navegue até a pasta do projeto:
-   ```bash
-   git clone <url-do-repo>
-   cd HotReaper
-   ```
+### 1️⃣ Motor de IA Groq Cloud (Copywriting Adulto/VIP)
+- Geração instantânea de legendas em **< 0.8s** utilizando modelos LLaMA 3.3 / Qwen.
+- 3 estilos de tom de voz configuráveis no painel:
+  - 🔥 **Picante & Safada:** Textos quentes, diretos, com emojis provocantes.
+  - 💋 **Sensual & Teasing:** Foco em atiçar a curiosidade e imaginação.
+  - 👑 **Conversão VIP:** Foco em conversão e exclusividade para assinantes.
+- **Acervo Reserva:** Catálogo com 40+ legendas pré-prontas ativado em caso de falha de conexão (zero posts sem legenda).
 
-2. Copie o arquivo de exemplo de variáveis de ambiente e configure suas credenciais:
-   ```bash
-   cp .env.example .env
-   nano .env
-   ```
+### 2️⃣ Acervo Multi-Canal & Auto-Limpeza de Disco
+- Isolamento absoluto de mídias por canal (`/data/vault/<channel_id>/`).
+- **Limpeza Imediata:** Assim que o vídeo ou pack de fotos é entregue no Telegram com sucesso, o arquivo físico é **apagado do disco na hora**, mantendo o uso de armazenamento sempre mínimo.
 
-3. Preencha os campos no `.env`:
-   - `BOT_TOKEN`: Token obtido no @BotFather.
-   - `TARGET_CHAT_ID`: ID numérico do grupo destino (pode ser sobrescrito dinamicamente via `/settarget`).
-   - `ALLOWED_USER_IDS`: IDs numéricos dos usuários autorizados separados por vírgula (ou deixe vazio para permitir qualquer usuário).
+### 3️⃣ Algoritmo de Cadência Inteligente (2 Vídeos ➔ 1 Pack de Fotos)
+- O bot rastreia a entrega e aplica a regra de engajamento:
+  1. Dispara o **1º Vídeo**.
+  2. Dispara o **2º Vídeo**.
+  3. No 3º disparo: envia um **Pack de até 3 Fotos** como álbum (`send_media_group`) com a legenda da IA.
+  4. Fallback automático: se não houver fotos no acervo, dispara o próximo vídeo sem interromper a fila.
+- Funciona tanto no **agendamento automático diário** quanto no **disparo manual via botão**.
+
+### 4️⃣ Normalização FFmpeg & Player Nativo no Telegram
+- Transcode automático para codec universal `H.264 (libx264)` e formato de pixel `yuv420p` (100% livre de tela preta).
+- Compressão adaptativa para vídeos pesados (>48MB) garantindo envio dentro do limite do Telegram.
+- Injeção de `-movflags +faststart` e metadados `ffprobe` para streaming instantâneo.
 
 ---
 
-## 🚀 Deploy na Oracle Cloud (Always Free)
+## 📌 Pré-requisitos & Variáveis de Ambiente
 
-Exemplo de deploy na VPS Ubuntu 22.04:
+Crie o arquivo `.env` a partir do `.env.example`:
 
-```bash
-# 1. Atualizar pacotes e instalar Docker + Docker Compose Plugin
-sudo apt update && sudo apt install -y docker.io docker-compose-plugin
+```env
+# Token gerado pelo @BotFather no Telegram
+BOT_TOKEN=SEU_TOKEN_AQUI
 
-# 2. Clonar o repositório
-git clone <url-do-repo> && cd HotReaper
+# ID numérico do dono único do bot (obtenha via @userinfobot)
+OWNER_ID=123456789
 
-# 3. Configurar o arquivo .env
-cp .env.example .env && nano .env
-
-# 4. Iniciar o container em segundo plano
-docker compose up -d
+# Chave da API Groq Cloud (para geração de legendas via IA)
+GROQ_API_KEY=gsk_sua_chave_groq_aqui
 ```
 
 ---
 
-## 🎯 Configurando o Grupo Destino
+## 🎛️ Painel de Controle Integrado (`/painel`)
 
-1. Adicione o bot ao grupo ou canal de destino das mídias.
-2. Dê permissão para enviar mensagens/fotos/vídeos no grupo.
-3. Dentro do próprio grupo, envie o comando:
-   ```text
-   /settarget
-   ```
-4. O bot responderá confirmando que aquele chat foi salvo como destino em `data/config.json`.
+Digite `/painel` no chat privado com o bot para acessar a interface completa:
+- **📦 Acervo & Disparos:** Visão da fila em tempo real (vídeos, fotos, MB), próximo da cadência, alternador de modo (*Imediato / Agendado / Manual*) e botão de disparo manual imediato.
+- **🤖 IA Groq:** Seleção de estilo de tom de voz da IA e teste de legendas ao vivo no chat.
+- **⚙️ Configurações:** Limites de download, modo silencioso e definição de canal destino.
+- **📊 Estatísticas & 📋 Histórico:** Métricas agregadas de downloads e logs de processamento.
+- **🔧 Sistema & Cache:** Diagnóstico de saúde do container e limpeza de cache temporário.
 
 ---
 
-## 💡 Como Usar
+## 🚀 Como Executar
 
-1. Abra um chat privado com o bot.
-2. Envie um link do Twitter/X (ex: `https://x.com/user/status/123456789`) ou uma URL direta de mídia (ex: `https://exemplo.com/imagem.jpg`).
-3. O bot responderá com `"⏳ Baixando..."` e, em seguida, enviará a mídia diretamente para o grupo destino configurado.
+### 🐳 Via Docker Compose (Produção Recomendada)
+
+```bash
+# Iniciar o container em segundo plano com build
+docker compose up -d --build
+
+# Visualizar logs em tempo real
+docker compose logs -f
+```
+
+### 🧪 Executando os Testes Automatizados
+
+```bash
+pytest tests/ -v
+```
