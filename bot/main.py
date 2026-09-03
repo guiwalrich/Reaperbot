@@ -167,5 +167,11 @@ def main() -> None:
     )
 
     logger.info("🚀 HotReaper VIP v3.0 iniciado com sucesso. Aguardando links...")
+    try:
+        asyncio.get_event_loop()
+    except RuntimeError:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+
     application.run_polling(allowed_updates=["message", "channel_post", "callback_query"])
 
