@@ -1492,3 +1492,45 @@ async def test_dispatch_concurrency_lock_and_bro_talk_sanitizer():
         assert res["media_type"] == "in_progress"
 
     assert not lock.locked()
+
+
+@pytest.mark.asyncio
+async def test_webhook_server_endpoints():
+    """Valida as rotas do servidor de webhooks do RavenBot (gateway instavel, bot down, pix aprovado)."""
+    from bot.modules.webhook_server import create_webhook_app
+    from aiohttp.test_utils import TestClient, TestServer
+
+    sent_messages = []
+    class MockBot:
+        async def send_message(self, chat_id, text, parse_mode=None):
+            sent_messages.append({"chat_id": chat_id, "text": text})
+
+    mock_bot = MockBot()
+    app = create_webhook_app(mock_bot)
+
+    async with TestClient(TestServer(app)) as client:
+        # 1. Health check
+        resp = await client.get("/health")
+        assert resp.status == 200
+        data = await resp.json()
+        assert data["status"] == "healthy"
+
+        # 2. Gateway Instável
+        resp = await client.post("/webhook/gateway", json={"erro": "taxa 60%"})
+        assert resp.status == 200
+        assert any("Gateway PIX Instável" in m["text"] for m in sent_messages)
+
+        # 3. Bot Offline / Caiu
+        resp = await client.post("/webhook/bot_down", json={"status": "offline"})
+        assert resp.status == 200
+        assert any("Bot do RavenBot Offline" in m["text"] for m in sent_messages)
+
+        # 4. PIX Aprovado
+        resp = await client.post("/webhook/pix_pago", json={"valor": "29,90", "nome": "Carlos", "plano": "VIP Vitalício"})
+        assert resp.status == 200
+        assert any("PIX APROVADO" in m["text"] and "Carlos" in m["text"] and "29,90" in m["text"] for m in sent_messages)
+
+        # 5. Erro no PIX
+        resp = await client.post("/webhook/pix_erro", json={})
+        assert resp.status == 200
+        assert any("Erro na Geração do PIX" in m["text"] for m in sent_messages)

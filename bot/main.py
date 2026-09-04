@@ -95,7 +95,9 @@ async def post_init(application: Application) -> None:
     asyncio.create_task(_periodic_temp_cleanup_worker())
     await reconcile_vault_integrity()
     asyncio.create_task(supervised_schedule_worker(application.bot))
-    logger.info("📦 Banco de dados inicializado, Coletor 6h e Heartbeat contínuo ativos.")
+    from bot.modules.webhook_server import start_webhook_server
+    asyncio.create_task(start_webhook_server(application.bot, port=8088))
+    logger.info("📦 Banco de dados, Coletor 6h, Heartbeat e Servidor de Webhooks (porta 8088) ativos.")
 
 
 async def channel_button_callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
